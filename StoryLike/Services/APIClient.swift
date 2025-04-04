@@ -28,11 +28,6 @@ final class APIClient: APIClientProtocol {
 
         let (data, response) = try await URLSession.shared.data(for: request)
 
-        if let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers),
-           let jsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted) {
-            print(String(decoding: jsonData, as: UTF8.self))
-        }
-
         guard
             let response = response as? HTTPURLResponse,
             response.statusCode == 200 else
@@ -42,7 +37,6 @@ final class APIClient: APIClientProtocol {
 
         do {
             let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
             return try decoder.decode(StoriesDataModel.self, from: data)
         } catch {
             throw URLError(.cannotDecodeRawData)
