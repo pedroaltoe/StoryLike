@@ -14,3 +14,7 @@ enum Size {
     static let medium: CGFloat = 8
     static let large: CGFloat = 12
 }
+
+enum ImageConstants {
+    static let placeHolder = "photo"
+}
