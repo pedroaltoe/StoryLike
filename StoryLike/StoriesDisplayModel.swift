@@ -7,6 +7,6 @@ struct StoriesDisplayModel: Identifiable {
 
 struct Story: Identifiable {
     let id: String
-    let image: String
+    let image: URL?
     let duration: TimeInterval
 }
