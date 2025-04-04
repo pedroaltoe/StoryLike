@@ -38,35 +38,53 @@ struct StoriesView: View {
         ZStack {
             TabView(selection: $viewModel.currentIndex) {
                 ForEach(displayModel.stories.indices, id: \.self) { index in
-                    Image(displayModel.stories[index].image)
-                        .resizable()
-                        .scaledToFill()
-                        .tag(index)
-                        .ignoresSafeArea()
-                        .overlay(
-                            VStack {
-                                StoryProgressBarView(progress: viewModel.progress)
-                                    .frame(height: 5)
-                                    .padding(.horizontal)
-                                Spacer()
-                            }
-                        )
-                        .onLongPressGesture(perform: viewModel.pauseStory)
-                        .gesture(
-                            TapGesture()
-                                .onEnded {
-                                    viewModel.nextStory(displayModel)
-                                }
-                        )
-                        .gesture(
-                            LongPressGesture()
-                                .onEnded { _ in
-                                    viewModel.resumeStory(displayModel)
-                                }
-                        )
+                    GeometryReader { geometry in
+                        storyImage(index, displayModel)
+                            .frame(width: geometry.size.width, height: geometry.size.height)
+                            .clipped()
+                    }
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
+        }
+    }
+
+    // MARK: Image
+
+    @ViewBuilder func storyImage(_ index: Int, _ displayModel: StoriesDisplayModel) -> some View {
+        CacheAsyncImage(url: displayModel.stories[index].image) { phase in
+            switch phase {
+            case .success(let image):
+                image
+                    .resizable()
+                    .scaledToFill()
+                    .tag(index)
+                    .ignoresSafeArea()
+                    .overlay(
+                        VStack {
+                            StoryProgressBarView(progress: viewModel.progress)
+                                .frame(height: 5)
+                                .padding(.horizontal)
+                            Spacer()
+                        }
+                    )
+                    .onLongPressGesture(perform: viewModel.pauseStory)
+                    .gesture(
+                        TapGesture()
+                            .onEnded {
+                                viewModel.nextStory(displayModel)
+                            }
+                    )
+                    .gesture(
+                        LongPressGesture()
+                            .onEnded { _ in
+                                viewModel.resumeStory(displayModel)
+                            }
+                    )
+            default:
+                Image(systemName: ImageConstants.placeHolder)
+                    .font(.largeTitle)
+            }
         }
     }
 
