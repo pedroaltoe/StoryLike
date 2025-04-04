@@ -11,7 +11,7 @@ import SwiftUI
 struct StoryLikeApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            StoriesView()
         }
     }
 }
