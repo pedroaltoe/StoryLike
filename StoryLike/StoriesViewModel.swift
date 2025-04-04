@@ -95,7 +95,7 @@ final class StoriesViewModel: ObservableObject {
 
     private func makeDisplayModel(_ dataModel: StoriesDataModel) -> StoriesDisplayModel {
         let stories = dataModel.compactMap {
-            Story(id: $0.id, image: $0.urls.regular, duration: 3)
+            Story(id: $0.id, image: $0.urls.regularUrl, duration: 6)
         }
 
         return StoriesDisplayModel(stories: stories)
